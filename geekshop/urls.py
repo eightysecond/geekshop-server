@@ -1,14 +1,15 @@
+from django.urls import path, include
 from django.contrib import admin
-from django.urls import path
-from mainapp import views as mainapp_views
 from django.conf import settings
 from django.conf.urls.static import static
 
+from mainapp import views as mainapp_views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", mainapp_views.index, name="index"),
-    path("products/", mainapp_views.products, name="products"),
-    path("test_products/", mainapp_views.test_products, name="test_products"),
+    path("", mainapp_views.main, name="main"),
+    path("products/", include("mainapp.urls", namespace="products")),
+    path("auth/", include("authapp.urls", namespace="auth")),
 ]
 
 if settings.DEBUG:

@@ -3,18 +3,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "ifl5u)oz_3fwbf0sl(_9*#a4_8duled=c*z+nvf%fd7#_orohd"
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-# Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -25,6 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "mainapp",
+    "authapp",
 ]
 
 MIDDLEWARE = [
@@ -90,7 +84,6 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
@@ -98,3 +91,4 @@ STATICFILES_DIRS = (
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+AUTH_USER_MODEL = "authapp.User"
