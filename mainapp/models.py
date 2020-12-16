@@ -6,7 +6,7 @@ class ProductCategory(models.Model):
     description = models.TextField(blank=True)
 
     class Meta:
-        verbose_name_plural = 'Product Categories'
+        verbose_name_plural = "Product Categories"
 
     def __str__(self):
         return self.name
