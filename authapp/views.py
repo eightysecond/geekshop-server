@@ -5,6 +5,7 @@ from django.contrib import messages
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 from basketapp.models import Basket
 
+
 def login(request):
     if request.method == "POST":
         form = UserLoginForm(data=request.POST)
@@ -36,18 +37,20 @@ def register(request):
 
 def profile(request):
     if request.method == 'POST':
-        form = UserProfileForm(data=request.POST, instance=request.user)
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("authapp:profile"))
     else:
         form = UserProfileForm(instance=request.user)
+
+    baskets = Basket.objects.filter(user=request.user)
+
     context = {
         "form": form,
-        "baskets": Basket.objects.filter(user=request.user),
+        "baskets": baskets,
     }
     return render(request, 'authapp/profile.html', context)
-
 
 
 def logout(request):
