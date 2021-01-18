@@ -1,3 +1,6 @@
+import hashlib
+import random
+
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
 
@@ -35,6 +38,23 @@ class UserRegisterForm(UserCreationForm):
             field.widget.attrs["class"] = "form-control py-4"
             field.help_text = ""
 
+    def clean_age(self):
+        age = self.cleaned_data["age"]
+        if age < 18:
+            raise ValidationError("Вы должны быть совершеннолетним", code="invalid_age")
+
+        return age
+
+    def save(self):
+        user = super().save()
+
+        user.is_active = False
+        salt = hashlib.sha1(str(random.random()).encode('utf8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1((user.email + salt).encode('utf8')).hexdigest()
+        user.save()
+
+        return user
+
 
 class UserProfileForm(UserChangeForm):
     avatar = forms.ImageField(widget=forms.FileInput())
@@ -52,9 +72,4 @@ class UserProfileForm(UserChangeForm):
         self.fields["avatar"].widget.attrs["class"] = "custom-file-input"
 
 
-def clean_age(self):
-    age = self.cleaned_data["age"]
-    if age < 18:
-        raise ValidationError("Вы должны быть совершеннолетним", code="invalid_age")
 
-    return age
